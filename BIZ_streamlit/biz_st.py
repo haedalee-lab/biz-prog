@@ -35,6 +35,7 @@ with st.echo():
 st.image("./BIZ_streamlit/사이다 사진.jpg", caption="사이다 사진", width=500)
 
 '#### :orange[오디오: st.audio()]'
+import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 audio_path = os.path.join(current_dir, "놀러오세요 동물의숲.mp3")
 st.audio(audio_path, format="audio/mpeg", loop=True)
