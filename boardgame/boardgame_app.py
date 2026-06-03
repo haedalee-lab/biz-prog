@@ -11,7 +11,7 @@ import datetime
 
 # Page Configuration
 st.set_page_config(
-    page_title="🎲 보드게임 플레이룸",
+    page_title="🎲 seajin and boardgames",
     page_icon="🎲",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -172,7 +172,8 @@ def handle_submit():
         "youtube_url": url,
         "video_id": video_id,
         "tags": tags,
-        "description": desc
+        "description": desc,
+        "likes": 0
     }
     games.append(new_game)
     save_games(games)
@@ -559,7 +560,7 @@ with st.container(key="game_card"):
         """
         <div class="header-container">
             <a href="/" target="_self" style="text-decoration: none; color: inherit;">
-                <h1 class="title">🎮 SEAJIN'S BOARDGAME ROOM ♟️</h1>
+                <h1 class="title">🎮 seajin and boardgames ♟️</h1>
             </a>
             <p class="instruction">
                 해진씨와 함께하는 보드게임 방에 오신 것을 환영합니다.<br>
@@ -700,7 +701,8 @@ with st.container(key="game_card"):
                                                         "youtube_url": edit_url.strip(),
                                                         "video_id": video_id,
                                                         "tags": [t.strip() for t in edit_tags_str.split(",") if t.strip()],
-                                                        "description": edit_desc.strip()
+                                                        "description": edit_desc.strip(),
+                                                        "likes": g_item.get("likes", 0)
                                                     }
                                                     break
                                             save_games(all_games_list)
