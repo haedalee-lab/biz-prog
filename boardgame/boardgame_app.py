@@ -269,10 +269,12 @@ st.markdown(
     
     .patchwork-container {{
         {patchwork_bg_css}
+        background-color: rgba(255, 253, 245, 0.55);
+        background-blend-mode: lighten;
         background-size: cover;
         background-position: center;
-        border: 4px solid #4a3e3d;
-        box-shadow: 0 8px 0px #4a3e3d;
+        border: 4px solid #8e7a75;
+        box-shadow: 0 8px 0px #e5dec9;
         border-radius: 20px;
         padding: 18px 30px;
         display: inline-block;
@@ -287,23 +289,23 @@ st.markdown(
         content: '';
         position: absolute;
         top: 6px; left: 6px; right: 6px; bottom: 6px;
-        border: 2px dashed rgba(255, 255, 255, 0.7);
+        border: 2px dashed rgba(255, 255, 255, 0.85);
         border-radius: 14px;
         pointer-events: none;
     }}
     .patchwork-container:hover {{
         transform: translateY(-4px);
-        box-shadow: 0 12px 0px #4a3e3d;
+        box-shadow: 0 12px 0px #e5dec9;
     }}
     .patchwork-container:active {{
         transform: translateY(2px);
-        box-shadow: 0 4px 0px #4a3e3d;
+        box-shadow: 0 4px 0px #e5dec9;
     }}
     .patchwork-title {{
         font-size: 2.2rem !important;
         font-weight: bold !important;
-        color: #ffffff !important;
-        text-shadow: 2px 2px 0px #4a3e3d, -2px -2px 0px #4a3e3d, 2px -2px 0px #4a3e3d, -2px 2px 0px #4a3e3d, 4px 4px 0px rgba(0,0,0,0.3) !important;
+        color: #4a3e3d !important;
+        text-shadow: 2px 2px 0px #ffffff, -2px -2px 0px #ffffff, 2px -2px 0px #ffffff, -2px 2px 0px #ffffff, 4px 4px 0px rgba(74, 62, 61, 0.15) !important;
         margin: 0 !important;
         font-family: 'DungGeunMo', monospace !important;
     }}
