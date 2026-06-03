@@ -201,7 +201,6 @@ def handle_submit():
     st.session_state.new_desc = ""
     st.session_state.form_error = ""
     st.session_state.form_success = f"'{name}' 게임이 성공적으로 등록되었습니다!"
-    st.session_state.current_tab = "1. 룰 검색 및 확인"
 
 # Map active tab key for CSS styling
 active_tab = st.session_state.current_tab
