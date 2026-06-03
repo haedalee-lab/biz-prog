@@ -11,7 +11,7 @@ import datetime
 
 # Page Configuration
 st.set_page_config(
-    page_title="🎲 seajin and boardgames",
+    page_title="🎲 seajin's boardgame room",
     page_icon="🎲",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -589,7 +589,7 @@ with st.container(key="game_card"):
         <div class="header-container">
             <a href="/" target="_self" style="text-decoration: none;">
                 <div class="patchwork-container">
-                    <h1 class="patchwork-title">🎮 seajin and boardgames ♟️</h1>
+                    <h1 class="patchwork-title">🎮 seajin's boardgame room ♟️</h1>
                 </div>
             </a>
             <p class="instruction">
