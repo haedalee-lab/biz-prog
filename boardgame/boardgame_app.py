@@ -139,6 +139,20 @@ def save_games(games):
     except Exception as e:
         st.error(f"데이터 저장 중 오류가 발생했습니다: {e}")
 
+@st.cache_data
+def get_bgm_base64():
+    import base64
+    # Robust search for file with Unicode normalization compatibility
+    for f in os.listdir(parent_dir):
+        if "동물의숲" in f or "동물의숲" in f:
+            mp3_path = os.path.join(parent_dir, f)
+            try:
+                with open(mp3_path, "rb") as file:
+                    return base64.b64encode(file.read()).decode("utf-8")
+            except Exception as e:
+                pass
+    return ""
+
 def extract_youtube_id(url: str) -> str:
     patterns = [
         r'(?:v=|\/v\/|embed\/|youtu\.be\/|\/shorts\/)([a-zA-Z0-9_-]{11})',
@@ -579,6 +593,109 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# BGM Setup
+bgm_base64 = get_bgm_base64()
+if bgm_base64:
+    components.html(
+        f"""
+        <!DOCTYPE html>
+        <html>
+        <head><style>body {{ margin: 0; padding: 0; overflow: hidden; }}</style></head>
+        <body>
+        <audio id="bgm-iframe-player" loop preload="auto">
+            <source src="data:audio/mp3;base64,{bgm_base64}" type="audio/mpeg">
+        </audio>
+        <script>
+            (function() {{
+                const audio = document.getElementById('bgm-iframe-player');
+                const parentDoc = window.parent.document;
+
+                // ── Inject floating button into parent window ──
+                let btn = parentDoc.getElementById('bgm-toggle-btn');
+                if (!btn) {{
+                    btn = parentDoc.createElement('button');
+                    btn.id = 'bgm-toggle-btn';
+                    btn.style.cssText = [
+                        'position:fixed',
+                        'top:20px',
+                        'right:20px',
+                        'z-index:999999',
+                        'background:#ffffff',
+                        'border:2px solid #4a3e3d',
+                        'border-radius:50%',
+                        'width:44px',
+                        'height:44px',
+                        'font-size:20px',
+                        'cursor:pointer',
+                        'box-shadow:2px 2px 0px #4a3e3d',
+                        'display:flex',
+                        'align-items:center',
+                        'justify-content:center',
+                        'transition:all 0.1s ease',
+                        'padding:0',
+                        'line-height:1',
+                    ].join(';');
+                    parentDoc.body.appendChild(btn);
+
+                    btn.addEventListener('mouseenter', () => {{
+                        btn.style.transform = 'translate(-1px,-1px)';
+                        btn.style.boxShadow = '3px 3px 0px #4a3e3d';
+                    }});
+                    btn.addEventListener('mouseleave', () => {{
+                        btn.style.transform = '';
+                        btn.style.boxShadow = '2px 2px 0px #4a3e3d';
+                    }});
+                    btn.addEventListener('mousedown', () => {{
+                        btn.style.transform = 'translate(1px,1px)';
+                        btn.style.boxShadow = '1px 1px 0px #4a3e3d';
+                    }});
+                }}
+
+                // ── Restore mute preference ──
+                let isMuted = localStorage.getItem('bgm_muted') === 'true';
+                audio.muted = isMuted;
+                btn.textContent = isMuted ? '🔇' : '🔈';
+
+                // ── Restore playback position (within the track length) ──
+                audio.addEventListener('canplay', function onCanPlay() {{
+                    audio.removeEventListener('canplay', onCanPlay);
+                    const savedTime = parseFloat(localStorage.getItem('bgm_time') || '0');
+                    if (savedTime > 0 && isFinite(savedTime)) {{
+                        try {{ audio.currentTime = savedTime % (audio.duration || 1); }} catch(e) {{}}
+                    }}
+                    audio.play().catch(() => {{
+                        // Browser blocked autoplay — wait for first user click on parent page
+                        parentDoc.addEventListener('click', () => audio.play(), {{ once: true }});
+                    }});
+                }});
+
+                // ── Save playback position every second ──
+                setInterval(() => {{
+                    if (!audio.paused && !audio.muted) {{
+                        localStorage.setItem('bgm_time', audio.currentTime);
+                    }}
+                }}, 1000);
+
+                // ── Toggle button handler ──
+                btn.onclick = function(e) {{
+                    e.stopPropagation();
+                    isMuted = !isMuted;
+                    audio.muted = isMuted;
+                    btn.textContent = isMuted ? '🔇' : '🔈';
+                    localStorage.setItem('bgm_muted', isMuted);
+                    if (!isMuted && audio.paused) {{
+                        audio.play();
+                    }}
+                }};
+            }})();
+        </script>
+        </body>
+        </html>
+        """,
+        height=0,
+        scrolling=False
+    )
 
 # Render main webapp inside the retro console card container
 with st.container(key="game_card"):
