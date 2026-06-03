@@ -89,6 +89,19 @@ elif len(st.session_state.dice_colors) > st.session_state.num_dice:
 
 # Find the 3D Dice Component directory
 parent_dir = os.path.dirname(os.path.abspath(__file__)) # /Users/haedal/Desktop/BIZ_vibe/boardgame
+
+# Load and base64-encode the patchwork image for header background
+import base64
+patchwork_bg_css = ""
+patchwork_path = os.path.join(parent_dir, "patchwork.jpg")
+if os.path.exists(patchwork_path):
+    try:
+        with open(patchwork_path, "rb") as f:
+            patchwork_b64 = base64.b64encode(f.read()).decode("utf-8")
+        patchwork_bg_css = f"background-image: url(data:image/jpeg;base64,{patchwork_b64});"
+    except Exception as e:
+        pass
+
 project_root = os.path.dirname(parent_dir) # /Users/haedal/Desktop/BIZ_vibe
 component_dir = os.path.join(project_root, "roll the dice", "dice_component")
 
@@ -254,18 +267,45 @@ st.markdown(
         margin-bottom: 1.2rem;
     }}
     
-    .title {{
+    .patchwork-container {{
+        {patchwork_bg_css}
+        background-size: cover;
+        background-position: center;
+        border: 4px solid #4a3e3d;
+        box-shadow: 0 8px 0px #4a3e3d;
+        border-radius: 20px;
+        padding: 18px 30px;
+        display: inline-block;
+        margin-bottom: 1.2rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }}
+    .patchwork-container::before {{
+        content: '';
+        position: absolute;
+        top: 6px; left: 6px; right: 6px; bottom: 6px;
+        border: 2px dashed rgba(255, 255, 255, 0.7);
+        border-radius: 14px;
+        pointer-events: none;
+    }}
+    .patchwork-container:hover {{
+        transform: translateY(-4px);
+        box-shadow: 0 12px 0px #4a3e3d;
+    }}
+    .patchwork-container:active {{
+        transform: translateY(2px);
+        box-shadow: 0 4px 0px #4a3e3d;
+    }}
+    .patchwork-title {{
         font-size: 2.2rem !important;
         font-weight: bold !important;
-        margin: 0 0 0.5rem 0 !important;
-        color: #4a3e3d !important;
-        text-align: center !important;
-        cursor: pointer;
-        transition: transform 0.2s ease, color 0.2s ease !important;
-    }}
-    .title:hover {{
-        color: #5D77E3 !important; /* Retro Blue hover */
-        transform: scale(1.02) !important;
+        color: #ffffff !important;
+        text-shadow: 2px 2px 0px #4a3e3d, -2px -2px 0px #4a3e3d, 2px -2px 0px #4a3e3d, -2px 2px 0px #4a3e3d, 4px 4px 0px rgba(0,0,0,0.3) !important;
+        margin: 0 !important;
+        font-family: 'DungGeunMo', monospace !important;
     }}
     
     .instruction {{
@@ -559,8 +599,10 @@ with st.container(key="game_card"):
     st.markdown(
         """
         <div class="header-container">
-            <a href="/" target="_self" style="text-decoration: none; color: inherit;">
-                <h1 class="title">🎮 seajin and boardgames ♟️</h1>
+            <a href="/" target="_self" style="text-decoration: none;">
+                <div class="patchwork-container">
+                    <h1 class="patchwork-title">🎮 seajin and boardgames ♟️</h1>
+                </div>
             </a>
             <p class="instruction">
                 해진씨와 함께하는 보드게임 방에 오신 것을 환영합니다.<br>
