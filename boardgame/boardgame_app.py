@@ -93,14 +93,17 @@ parent_dir = os.path.dirname(os.path.abspath(__file__)) # /Users/haedal/Desktop/
 # Load and base64-encode the patchwork image for header background
 import base64
 patchwork_bg_css = ""
-patchwork_path = os.path.join(parent_dir, "patchwork.jpg")
-if os.path.exists(patchwork_path):
-    try:
-        with open(patchwork_path, "rb") as f:
-            patchwork_b64 = base64.b64encode(f.read()).decode("utf-8")
-        patchwork_bg_css = f"background-image: url(data:image/jpeg;base64,{patchwork_b64});"
-    except Exception as e:
-        pass
+for ext in ["png", "jpg", "jpeg"]:
+    path = os.path.join(parent_dir, f"patchwork.{ext}")
+    if os.path.exists(path):
+        try:
+            mime = "png" if ext == "png" else "jpeg"
+            with open(path, "rb") as f:
+                b64 = base64.b64encode(f.read()).decode("utf-8")
+            patchwork_bg_css = f"background-image: url(data:image/{mime};base64,{b64});"
+            break
+        except Exception:
+            pass
 
 project_root = os.path.dirname(parent_dir) # /Users/haedal/Desktop/BIZ_vibe
 component_dir = os.path.join(project_root, "roll the dice", "dice_component")
@@ -274,7 +277,7 @@ st.markdown(
         border: none !important;
         box-shadow: none !important;
         border-radius: 0px !important;
-        padding: 20px 40px;
+        padding: 50px 40px;
         display: inline-block;
         margin-bottom: 1.2rem;
         cursor: pointer;
