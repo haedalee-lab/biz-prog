@@ -1007,64 +1007,7 @@ with st.container(key="game_card"):
             if st.session_state.form_success:
                 st.success(st.session_state.form_success)
                 st.session_state.form_success = ""
-                # Dynamically generate elements in Python to avoid iframe/JS sandbox limitations
-                import random
-                celebration_colors = ['#ffffff', '#4a6cd4', '#9fa3ab', '#82c3ec', '#b08b73']
-                html_elements = []
-                for _ in range(45):
-                    is_heart = random.choice([True, False])
-                    color = random.choice(celebration_colors)
-                    left = random.uniform(0, 95)
-                    delay = random.uniform(0, 3.0)
-                    duration = random.uniform(4.0, 7.0)
-                    rotation = random.uniform(-30, 30)
-                    scale = random.uniform(0.6, 1.2)
-                    
-                    if is_heart:
-                        svg = (
-                            f'<svg viewBox="0 0 32 32" width="40" height="40" style="filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.15));">'
-                            f'<path d="M16,28.2 C16,28.2 2.5,20.2 2.5,11.2 C2.5,6.2 6.5,2.2 11.5,2.2 C14.5,2.2 16,5.2 16,5.2 C16,5.2 17.5,2.2 20.5,2.2 C25.5,2.2 29.5,6.2 29.5,11.2 C29.5,20.2 16,28.2 16,28.2 Z" '
-                            f'fill="{color}" stroke="#4a3e3d" stroke-width="1.8" stroke-linejoin="round" />'
-                            f'</svg>'
-                        )
-                    else:
-                        svg = (
-                            f'<svg viewBox="0 0 32 45" width="40" height="56" style="filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.15));">'
-                            f'<ellipse cx="16" cy="18" rx="14" ry="17" fill="{color}" stroke="#4a3e3d" stroke-width="1.8" />'
-                            f'<polygon points="16,35 12,39 20,39" fill="{color}" stroke="#4a3e3d" stroke-width="1.8" stroke-linejoin="round" />'
-                            f'<path d="M16,39 Q13,44 16,51" stroke="#4a3e3d" stroke-width="1.5" fill="none" />'
-                            f'</svg>'
-                        )
-                    
-                    element_html = (
-                        f'<div class="float-item" style="left: {left}vw; animation-delay: {delay}s; animation-duration: {duration}s; transform: scale({scale}); --target-rotation: {rotation}deg;">'
-                        f'{svg}'
-                        f'</div>'
-                    )
-                    html_elements.append(element_html)
-                
-                elements_joined = "".join(html_elements)
-                
-                celebration_style = (
-                    "<style>"
-                    "@keyframes floatUpCelebration {"
-                    "  0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }"
-                    "  10% { opacity: 1; }"
-                    "  90% { opacity: 1; }"
-                    "  100% { transform: translateY(-20vh) rotate(var(--target-rotation, 0deg)); opacity: 0; }"
-                    "}"
-                    ".float-item {"
-                    "  position: absolute;"
-                    "  bottom: 0;"
-                    "  animation: floatUpCelebration 6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;"
-                    "}"
-                    "</style>"
-                )
-                
-                st.markdown(
-                    f'<div id="celebration-viewport" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999999; overflow: hidden;">{elements_joined}</div>{celebration_style}',
-                    unsafe_allow_html=True
-                )
+                st.balloons()
             
             # Inputs
             st.text_input("보드게임 이름", placeholder="예: 세틀러 오브 카탄", key="new_name")
