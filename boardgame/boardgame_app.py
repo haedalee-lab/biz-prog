@@ -1007,7 +1007,91 @@ with st.container(key="game_card"):
             if st.session_state.form_success:
                 st.success(st.session_state.form_success)
                 st.session_state.form_success = ""
-                st.balloons()
+                st.markdown(
+                    """
+                    <div id="celebration-container" style="position: fixed; bottom: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 99999; overflow: hidden;"></div>
+                    <style>
+                    @keyframes floatUp {
+                      0% {
+                        transform: translateY(105vh) rotate(0deg);
+                        opacity: 1;
+                      }
+                      90% {
+                        opacity: 1;
+                      }
+                      100% {
+                        transform: translateY(-15vh) rotate(var(--target-rotation, 0deg));
+                        opacity: 0;
+                      }
+                    }
+                    .floating-element {
+                      position: absolute;
+                      bottom: 0;
+                      animation: floatUp 5s ease-in forwards;
+                    }
+                    </style>
+                    <script>
+                    (function() {
+                      const container = document.getElementById('celebration-container');
+                      if (!container) return;
+                      
+                      const colors = [
+                        '#ffffff', // White (🤍)
+                        '#4a6cd4', // Blue (💙)
+                        '#9fa3ab', // Grey (🩶)
+                        '#82c3ec', // Light Blue (🩵)
+                        '#b08b73'  // Brown (🤎)
+                      ];
+                      
+                      const totalElements = 45;
+                      for (let i = 0; i < totalElements; i++) {
+                        const isHeart = Math.random() > 0.5;
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        const el = document.createElement('div');
+                        el.className = 'floating-element';
+                        
+                        const left = Math.random() * 100;
+                        const delay = Math.random() * 2.5;
+                        const duration = 3.5 + Math.random() * 2.5;
+                        const rotation = (Math.random() - 0.5) * 60;
+                        const scale = 0.7 + Math.random() * 0.6;
+                        
+                        el.style.left = left + 'vw';
+                        el.style.animationDuration = duration + 's';
+                        el.style.animationDelay = delay + 's';
+                        el.style.transform = 'scale(' + scale + ')';
+                        el.style.setProperty('--target-rotation', rotation + 'deg');
+                        
+                        let svgContent = '';
+                        if (isHeart) {
+                          svgContent = `
+                            <svg viewBox="0 0 32 32" width="40" height="40" style="filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.15));">
+                              <path d="M16,28.2 C16,28.2 2.5,20.2 2.5,11.2 C2.5,6.2 6.5,2.2 11.5,2.2 C14.5,2.2 16,5.2 16,5.2 C16,5.2 17.5,2.2 20.5,2.2 C25.5,2.2 29.5,6.2 29.5,11.2 C29.5,20.2 16,28.2 16,28.2 Z" 
+                                    fill="${color}" stroke="#4a3e3d" stroke-width="1.8" stroke-linejoin="round" />
+                            </svg>
+                          `;
+                        } else {
+                          svgContent = `
+                            <svg viewBox="0 0 32 45" width="40" height="56" style="filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.15));">
+                              <ellipse cx="16" cy="18" rx="14" ry="17" fill="${color}" stroke="#4a3e3d" stroke-width="1.8" />
+                              <polygon points="16,35 12,39 20,39" fill="${color}" stroke="#4a3e3d" stroke-width="1.8" stroke-linejoin="round" />
+                              <path d="M16,39 Q13,44 16,51" stroke="#4a3e3d" stroke-width="1.5" fill="none" />
+                            </svg>
+                          `;
+                        }
+                        
+                        el.innerHTML = svgContent;
+                        container.appendChild(el);
+                      }
+                      
+                      setTimeout(() => {
+                        container.remove();
+                      }, 9000);
+                    })();
+                    </script>
+                    """,
+                    unsafe_allow_html=True
+                )
             
             # Inputs
             st.text_input("보드게임 이름", placeholder="예: 세틀러 오브 카탄", key="new_name")
