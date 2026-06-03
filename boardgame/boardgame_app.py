@@ -586,12 +586,12 @@ with st.container(key="game_card"):
         <div class="header-container">
             <a href="/" target="_self" style="text-decoration: none;">
                 <div class="patchwork-container">
-                    <h1 class="patchwork-title">🤍 seajin and boardgames 🤍</h1>
+                    <h1 class="patchwork-title">🎮 seajin and boardgames ♟️</h1>
                 </div>
             </a>
             <p class="instruction">
                 해진씨와 함께하는 보드게임 방에 오신 것을 환영합니다.<br>
-                🎮 추천 게임 룰 검색 부터, 게임에 필요한 주사위 굴리기까지 함께 즐겨요♟️
+                추천 게임 룰 검색 부터, 게임에 필요한 주사위 굴리기까지 함께 즐겨요🤍
             </p>
         </div>
         """,
