@@ -1007,33 +1007,48 @@ with st.container(key="game_card"):
             if st.session_state.form_success:
                 st.success(st.session_state.form_success)
                 st.session_state.form_success = ""
-                st.markdown(
+                components.html(
                     """
-                    <div id="celebration-container" style="position: fixed; bottom: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 99999; overflow: hidden;"></div>
-                    <style>
-                    @keyframes floatUp {
-                      0% {
-                        transform: translateY(105vh) rotate(0deg);
-                        opacity: 1;
-                      }
-                      90% {
-                        opacity: 1;
-                      }
-                      100% {
-                        transform: translateY(-15vh) rotate(var(--target-rotation, 0deg));
-                        opacity: 0;
-                      }
-                    }
-                    .floating-element {
-                      position: absolute;
-                      bottom: 0;
-                      animation: floatUp 5s ease-in forwards;
-                    }
-                    </style>
                     <script>
                     (function() {
-                      const container = document.getElementById('celebration-container');
-                      if (!container) return;
+                      const parentDoc = window.parent.document;
+                      
+                      // Remove old container if exists
+                      const oldContainer = parentDoc.getElementById('celebration-container');
+                      if (oldContainer) oldContainer.remove();
+                      
+                      const container = parentDoc.createElement('div');
+                      container.id = 'celebration-container';
+                      container.style.cssText = 'position: fixed; bottom: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 99999; overflow: hidden;';
+                      
+                      // Inject CSS into parent document
+                      const styleId = 'celebration-style';
+                      let styleEl = parentDoc.getElementById(styleId);
+                      if (!styleEl) {
+                        styleEl = parentDoc.createElement('style');
+                        styleEl.id = styleId;
+                        styleEl.innerHTML = `
+                          @keyframes floatUp {
+                            0% {
+                              transform: translateY(105vh) rotate(0deg);
+                              opacity: 1;
+                            }
+                            90% {
+                              opacity: 1;
+                            }
+                            100% {
+                              transform: translateY(-15vh) rotate(var(--target-rotation, 0deg));
+                              opacity: 0;
+                            }
+                          }
+                          .floating-element {
+                            position: absolute;
+                            bottom: 0;
+                            animation: floatUp 5s ease-in forwards;
+                          }
+                        `;
+                        parentDoc.head.appendChild(styleEl);
+                      }
                       
                       const colors = [
                         '#ffffff', // White (🤍)
@@ -1047,7 +1062,7 @@ with st.container(key="game_card"):
                       for (let i = 0; i < totalElements; i++) {
                         const isHeart = Math.random() > 0.5;
                         const color = colors[Math.floor(Math.random() * colors.length)];
-                        const el = document.createElement('div');
+                        const el = parentDoc.createElement('div');
                         el.className = 'floating-element';
                         
                         const left = Math.random() * 100;
@@ -1084,13 +1099,15 @@ with st.container(key="game_card"):
                         container.appendChild(el);
                       }
                       
+                      parentDoc.body.appendChild(container);
+                      
                       setTimeout(() => {
                         container.remove();
                       }, 9000);
                     })();
                     </script>
                     """,
-                    unsafe_allow_html=True
+                    height=0
                 )
             
             # Inputs
