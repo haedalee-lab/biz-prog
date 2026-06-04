@@ -264,13 +264,13 @@
         
         for (let i = 0; i < numClicks; i++) {
           const timeOffset = (i / numClicks) * 0.8 + Math.random() * 0.08;
-          scheduleWoodThud(audioCtx, now + timeOffset, 0.5, 210 + Math.random() * 50, 0.04);
+          scheduleWoodThud(audioCtx, now + timeOffset, 0.7, 210 + Math.random() * 50, 0.04);
         }
 
         // Landing thuds
         const landingTime = now + 0.95;
-        scheduleWoodThud(audioCtx, landingTime, 1.2, 140 + Math.random() * 15, 0.09);
-        scheduleWoodThud(audioCtx, landingTime + 0.12, 0.45, 175 + Math.random() * 25, 0.05);
+        scheduleWoodThud(audioCtx, landingTime, 1.6, 140 + Math.random() * 15, 0.09);
+        scheduleWoodThud(audioCtx, landingTime + 0.12, 0.65, 175 + Math.random() * 25, 0.05);
 
       } catch (e) {
         console.log("Web Audio API not supported: ", e);
@@ -289,7 +289,7 @@
       osc.frequency.setValueAtTime(frequency, time);
       osc.frequency.exponentialRampToValueAtTime(frequency * 0.72, time + decayTime);
 
-      const baseVolume = 0.65; // Increased roll sound volume
+      const baseVolume = 0.9; // Increased roll sound volume
       const volume = baseVolume * volumeScale;
       gainNode.gain.setValueAtTime(0, time);
       gainNode.gain.linearRampToValueAtTime(volume, time + 0.002);
